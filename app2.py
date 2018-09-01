@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,request
 
 from flask import jsonify
   
@@ -22,7 +22,7 @@ def connection():
 	 
 	user = "root",
 	 
-	passwd = "",
+	passwd = "",  #enter password here daww
 	 
 	db = "users"
 	 
@@ -40,6 +40,26 @@ c, con = connection()
 def hello():
  
     return 'WUBBA LUBBA DUB DUB'
+
+@app.route("/login",methods=['POST'])
+
+def log():
+	print(request.form['aadhar'])
+	aa = request.form['aadhar']
+	print(request.form['phone'])
+	ph = request.form['phone']
+	#return 'hello'+request.form['aadhar']
+	query = 'select Phone from login where AadharID="'+aa+'"'
+        c.execute(query)
+	d = ""
+	users = c.fetchall()
+	
+	for user in users:
+		d = d+user[0]
+	if d==ph: 
+		return "1"
+	else:
+ 		return "0"
    
  
 @app.route("/get/")
@@ -64,14 +84,14 @@ def get_data():
 	data = data+'"'+'12'+'"'+':'+'"'+'21'+'"'+'}'
 	
 
-		
+	json_data = json.dumps(data)	
 	 
 	gc.collect()
 	 
 
 	 
 	 
-	return jsonify(data)
+	return jsonify(json_data)
 
 if __name__ == "__main__":
  
