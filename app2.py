@@ -22,7 +22,7 @@ def connection():
 	 
 	user = "root",
 	 
-	passwd = "1234567890",
+	passwd = "",
 	 
 	db = "users"
 	 
