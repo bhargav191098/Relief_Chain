@@ -7,13 +7,12 @@ from uuid import uuid4
 import requests
 from flask import Flask, jsonify, request
 
-
 class Blockchain:
     def __init__(self):
         self.current_transactions = []
         self.chain = []
         self.nodes = set()
-
+        reciever="me"
         # Create the genesis block
         self.new_block(previous_hash='1', proof=100)
 
@@ -220,6 +219,11 @@ def mine():
     return jsonify(response), 200
 
 
+@app.route('/rec',methods=['GET'])
+def recievers():
+	response = {'receiver': reciever}
+	return jsonify(response), 200
+
 @app.route('/transactions/new', methods=['POST'])
 def new_transaction():
     values = request.get_json()
@@ -228,7 +232,7 @@ def new_transaction():
     required = ['sender', 'recipient', 'amount']
     if not all(k in values for k in required):
         return 'Missing values', 400
-
+    reciever = values['recipient']
     # Create a new Transaction
     index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
 
@@ -289,4 +293,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
     port = args.port
 
-    app.run(host='0.0.0.0', port=port)
+app.run(host='0.0.0.0', port=port)
